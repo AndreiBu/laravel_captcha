@@ -1,12 +1,12 @@
 {
     "name": "AndreiBu/laravel_captcha",
-    "description": "No CAPTCHA reCAPTCHA For Laravel.",
-    "keywords": ["recaptcha", "no-captcha", "captcha", "laravel", "laravel4", "laravel5"],
+    "description": "CAPTCHA For Laravel.",
+    "keywords": ["captcha", "laravel", "laravel5"],
     "license": "MIT",
     "authors": [
         {
-            "name": "anhskohbo",
-            "email": "anhskohbo@gmail.com"
+            "name": "AndreiBu",
+            "email": "andrey.buldakoff@gmail.com"
         }
     ],
     "require": {
@@ -16,7 +16,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Anhskohbo\\NoCaptcha\\": "src/"
+            "AndreiBu\\laravel_captcha\\": "src/"
         }
     }
 }
