@@ -1,5 +1,6 @@
 {
     "name": "andreibu/laravel_captcha",
+    "type": "package",
     "description": "CAPTCHA For Laravel.",
     "keywords": ["captcha", "laravel", "laravel5"],
     "license": "MIT",
@@ -17,5 +18,6 @@
         "psr-4": {
             "AndreiBu\\laravel_captcha\\": "src/"
         }
-    }
+    },
+	"minimum-stability": "dev"
 }
