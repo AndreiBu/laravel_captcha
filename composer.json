@@ -1,5 +1,5 @@
 {
-    "name": "AndreiBu/laravel_captcha",
+    "name": "andreibu/laravel_captcha",
     "description": "CAPTCHA For Laravel.",
     "keywords": ["captcha", "laravel", "laravel5"],
     "license": "MIT",
