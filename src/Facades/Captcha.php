@@ -1,6 +1,6 @@
 <?php
 
-namespace AndreiBu\Captcha\Facades;
+namespace AndreiBu\laravel_captcha\Facades;
 
 use Illuminate\Support\Facades\Facade;
 

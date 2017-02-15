@@ -1,6 +1,6 @@
 <?php
 
-namespace AndreiBu/Captcha;
+namespace AndreiBu\laravel_captcha;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -52,11 +52,8 @@ class CaptchaServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('captcha', function ($app) {
-            return new Captcha(
-                $app['config']['captcha.secret'],
-                $app['config']['captcha.sitekey']
-            );
+        $this->app->bind('captcha', function ($app) {
+            return new Captcha($app['config']);
         });
     }
 
