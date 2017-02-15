@@ -1,7 +1,7 @@
 No CAPTCHA reCAPTCHA [![Build Status](https://travis-ci.org/anhskohbo/no-captcha.svg?branch=master&style=flat-square)](https://travis-ci.org/anhskohbo/no-captcha)
 ==========
 
-![recaptcha_anchor 2x](//humanconenction.org/images/logo.png)
+![recaptcha_anchor 2x](//humanconnection.org/images/logo.png)
 
 > For Laravel 4 use [v1](https://github.com/anhskohbo/no-captcha/tree/v1) branch.
 
