@@ -92,6 +92,7 @@ class Captcha
      */
     public function verifyRequest(Request $request)
     {
+        //test
         return $this->verifyResponse(
             $request->get('g-recaptcha-response'),
             $request->getClientIp()
