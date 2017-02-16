@@ -50,7 +50,7 @@ class Captcha
         if($c==1){$c1='+';}
         else if($c==2){$c1='-';if($a<$b){$a1=$b;$a=$b;$b=$a1;}}
         else if($c==3){$c1='*';}
-        $d1=date("Y-m-d G:i:s",time()-360);
+        $d1=date("Y-m-d G:i:s",time()-3600);
         $d2=date("Y-m-d G:i:s",time());
         $str='mediest'.$a.$c1.$b.$ip.$d2;
         $md5_1=md5($str);
