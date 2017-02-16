@@ -59,20 +59,13 @@ Add ServiceProvider to the providers array in `config/app.php`.
 ```
 
 
-With custom attributes and language support:
-
-```
-{!! app('captcha')->display($attributes = [], $lang = null); !!}
-```
-
 ##### Validation
 
 Add `'g-recaptcha-response' => 'required|captcha'` to rules array.
 
 ```php
-
 $validate = Validator::make(Input::all(), [
-	'g-recaptcha-response' => 'required|captcha'
+	'captcha_cod' => 'required|captcha'
 ]);
 
 ```
