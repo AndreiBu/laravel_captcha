@@ -3,6 +3,10 @@
 namespace AndreiBu\laravel_captcha;
 
 use Illuminate\Support\ServiceProvider;
+//use Illuminate\Validation\Validator;
+use Illuminate\Support\MessageBag;
+use Illuminate\Support\Facades\Validator;
+
 
 class CaptchaServiceProvider extends ServiceProvider
 {
@@ -21,9 +25,18 @@ class CaptchaServiceProvider extends ServiceProvider
         $app = $this->app;
 
         $this->bootConfig();
+        
+        
+        $this->publishMigrations();
 
-        $app['validator']->extend('captcha', function ($attribute, $value) use ($app) {
-            return $app['captcha']->verifyResponse($value, $app['request']->getClientIp());
+
+        
+        $app['validator']->extend('captcha', function ($attribute, $value,$validator) use ($app) 
+        {
+            if(!isset($app['request']->captcha_md5)){return false;}
+            
+            return $app['captcha']->verifyResponse($value, $app['request']->captcha_md5);
+            
         });
 
         if ($app->bound('form')) {
@@ -66,4 +79,17 @@ class CaptchaServiceProvider extends ServiceProvider
     {
         return ['captcha'];
     }
+    
+    private function publishMigrations()
+    {
+        $path = $this->getMigrationsPath();
+        $this->publishes([$path => database_path('migrations')], 'migrations');
+    }
+    
+    private function getMigrationsPath()
+    {
+        return __DIR__ . '/../database/migrations/';
+    }
+       
+    
 }

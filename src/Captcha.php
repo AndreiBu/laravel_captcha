@@ -2,44 +2,86 @@
 
 namespace AndreiBu\laravel_captcha;
 
-use Symfony\Component\HttpFoundation\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Validator;
+
 
 
 class Captcha
 {
-
+    public $md5='';
     /**
      * Captcha.
      *
-     * @param string $secret
-     * @param string $sitekey
+     * @param array $config
      */
     public function __construct($config=array())
     {
     }
 
     /**
-     * New captcha cod.
+     * return md5 .
      *
-     * @param array  $attributes
-     * @param string $lang
      *
      * @return string
      */
-    public function create()
+    function md5()
     {
+    return $this->md5;
+    }
 
-        
+    /**
+     * register new captcha cod.
+     *
+     * @param bool $return   true | false
+     *
+     * @return string 
+     */
+    
+    
+    function create_cod($return=false)
+    {
+        $a=mt_rand(10000,100000);
+        $b=0;
+        $c=1;
+        $ip='';
+        if(isset($_SERVER["REMOTE_ADDR"])){$ip = $_SERVER["REMOTE_ADDR"];}
+        $c1='+';
+        if($c==1){$c1='+';}
+        else if($c==2){$c1='-';if($a<$b){$a1=$b;$a=$b;$b=$a1;}}
+        else if($c==3){$c1='*';}
+        $d1=date("Y-m-d G:i:s",time()-360);
+        $d2=date("Y-m-d G:i:s",time());
+        $str='mediest'.$a.$c1.$b.$ip.$d2;
+        $md5_1=md5($str);
+        DB::table('captcha')->where('dat', '<', $d1)->delete();
+        DB::table('captcha')->insert(array('a' => $a,'md5'=>$md5_1, 'dat' => $d2) );
+        $this->md5=$md5_1;
+        if($return){return $md5_1;}
+    }
+    
+    /**
+     * Render base64 img captcha.
+     *
+     * @param string $fat
+     *
+     * @return string
+     */
+    
+    public function img()
+    {
+        $fat=$this->md5;
+        $results = DB::select('select * from captcha where  md5= ?', [$this->md5]);
+        $s=$b='';
+        if(isset($results[0])){$s=$results[0]->a;}
         $html = '';
-
-        header("Content-type: image/jpeg");
         $w=180;
         $h=56;
         $dest1 = imagecreatetruecolor($w,$h);
         $color=imagecolorallocate($dest1,255,255,255);
         imagefilledrectangle($dest1,0,0,$w,$h,$color);
         
-        $s=$b=mt_rand(10000,99999);
+        
         $b1='';
         $color=imagecolorallocate($dest1,0,127,137);
         
@@ -77,36 +119,17 @@ class Captcha
             imageline($dest1, rand(-50, 200), rand(-101, 150), rand(80, 380), rand(51, 250), $color);
         }
         
-            ob_start(); // Let's start output buffering.
-                imagejpeg($dest1); //This will normally output the image, but because of ob_start(), it won't.
-                $contents = ob_get_contents(); //Instead, output above is saved to $contents
-            ob_end_clean(); //End the output buffer.
-        
-        $html.= "data:image/jpeg;base64," . base64_encode($contents);        
-        
+            ob_start(); 
+                imagejpeg($dest1); 
+                $contents = ob_get_contents(); 
+            ob_end_clean(); 
 
-            //imagejpeg($dest1);
-            imagedestroy($dest1);
-            
+        $html.= '<img src="data:image/jpeg;base64,' . base64_encode($contents).'">';        
+        imagedestroy($dest1);
             
         return $html;
     }
     
-    /**
-     * Render HTML captcha.
-     *
-     * @param array  $attributes
-     * @param string $lang
-     *
-     * @return string
-     */
-    public function display($attributes = [], $lang = null)
-    {
-        $html = '';
-        $html .= '<h1>11</h1>';
-
-        return $html;
-    }
 
     /**
      * Verify captcha response.
@@ -116,23 +139,30 @@ class Captcha
      *
      * @return bool
      */
-    public function verifyResponse($response, $clientIp = null)
+    public function verifyResponse($code, $md5)
     {
-        if (empty($response)) {
-            return false;
+        $capcha_check=0;
+        $results = DB::select('select * from captcha where  md5= ?', [$md5]);
+        $s='';
+        if(isset($results[0])){$s=$results[0]->a;}
+        else
+        {
+            $capcha_check=false;
         }
-
-        $response = $this->sendRequestVerify([
-            'secret' => $this->secret,
-            'response' => $response,
-            'remoteip' => $clientIp,
-        ]);
-
-        return isset($response['success']) && $response['success'] === true;
+        
+        if(strlen($s)==strlen($code) and $code==$s)
+        {
+            $capcha_check=true;
+        }
+        
+        
+        //if(isset($response->captcha_cod)) return true;
+        
+        return $capcha_check;
     }
 
     /**
-     * Verify no-captcha response by Symfony Request.
+     * Verify captcha response by Symfony Request.
      *
      * @param Request $request
      *
@@ -140,56 +170,15 @@ class Captcha
      */
     public function verifyRequest(Request $request)
     {
-        //test
+        
+/*
         return $this->verifyResponse(
             $request->get('g-recaptcha-response'),
             $request->getClientIp()
         );
+*/        
     }
 
-    /**
-     * Get recaptcha js link.
-     *
-     * @param string $lang
-     *
-     * @return string
-     */
-    public function getJsLink($lang = null)
-    {
-        return $lang ? static::CLIENT_API.'?hl='.$lang : static::CLIENT_API;
-    }
 
-    /**
-     * Send verify request.
-     *
-     * @param array $query
-     *
-     * @return array
-     */
-    protected function sendRequestVerify(array $query = [])
-    {
-        $response = $this->http->request('POST', static::VERIFY_URL, [
-            'form_params' => $query,
-        ]);
 
-        return json_decode($response->getBody(), true);
-    }
-
-    /**
-     * Build HTML attributes.
-     *
-     * @param array $attributes
-     *
-     * @return string
-     */
-    protected function buildAttributes(array $attributes)
-    {
-        $html = [];
-
-        foreach ($attributes as $key => $value) {
-            $html[] = $key.'="'.$value.'"';
-        }
-
-        return count($html) ? ' '.implode(' ', $html) : '';
-    }
 }

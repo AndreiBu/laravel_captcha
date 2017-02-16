@@ -39,7 +39,7 @@ Add ServiceProvider to the providers array in `config/app.php`.
 
 ### Usage
 
-##### Display CAPTCHA
+##### create CAPTCHA cod
 
 ```php
           {!! Captcha::create_cod(); !!}
@@ -47,6 +47,17 @@ Add ServiceProvider to the providers array in `config/app.php`.
           {!! app('captcha')->create_cod(); !!}
 
 ```
+
+##### display CAPTCHA 
+
+```php
+        {!! Captcha::create_cod(); !!}
+		<input name="captcha_md5" type="hidden" value="{!! Captcha::md5(); !!}">
+		<input name="captcha_cod" type="text" value="">
+		<img src="{!! Captcha::img(); !!}">
+
+```
+
 
 With custom attributes and language support:
 
