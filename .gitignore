@@ -54,3 +54,7 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+.settings/*
+.buildpath
+.project
