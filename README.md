@@ -61,7 +61,7 @@ Add ServiceProvider to the providers array in `config/app.php`.
 
 ##### Validation
 
-Add `'g-recaptcha-response' => 'required|captcha'` to rules array.
+Add `'captcha_cod' => 'required|captcha'` to rules array.
 
 ```php
 $validate = Validator::make(Input::all(), [
