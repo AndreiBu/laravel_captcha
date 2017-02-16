@@ -1,38 +1,45 @@
-No CAPTCHA reCAPTCHA [![Build Status](https://travis-ci.org/anhskohbo/no-captcha.svg?branch=master&style=flat-square)](https://travis-ci.org/anhskohbo/no-captcha)
+CAPTCHA reCAPTCHA 
 ==========
 
-![recaptcha_anchor 2x](http://humanconnection.org/inages/logo.png)
-
-> For Laravel 4 use [v1](https://github.com/anhskohbo/no-captcha/tree/v1) branch.
 
 ## Installation
 
 ```
-composer require anhskohbo/no-captcha
+composer require andreibu/laravel_captcha
 ```
 
 ## Laravel 5
 
 ### Setup
 
-Add ServiceProvider to the providers array in `app/config/app.php`.
+Add ServiceProvider to the providers array in `config/app.php`.
 
 ```
-Anhskohbo\NoCaptcha\NoCaptchaServiceProvider::class,
+
+   'providers' => [
+    ...
+	AndreiBu\laravel_captcha\CaptchaServiceProvider::class,
+	
+	],
+	
+   'aliases' => [
+    ...
+    
+	'Captcha' => AndreiBu\laravel_captcha\Facades\Captcha::class,
+	],
+	
 ```
 
 ### Configuration
 
-Add `NOCAPTCHA_SECRET` and `NOCAPTCHA_SITEKEY` in **.env** file (without brackets):
 
 ```
-NOCAPTCHA_SECRET=[secret-key]
-NOCAPTCHA_SITEKEY=[site-key]
+[]
 ```
 
 ### Usage
 
-##### Display reCAPTCHA
+##### Display CAPTCHA
 
 ```php
 {!! app('captcha')->display(); !!}
