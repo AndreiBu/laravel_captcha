@@ -69,7 +69,7 @@ Add Route to reload captcha `routes/web.php`.
 
 ##### display CAPTCHA + reload
 
-```html jquery
+```php
                        <div class="pwd_reset_captcha">
                                 @if ($errors->has('captcha_cod'))
                                     <span class="help-block">
