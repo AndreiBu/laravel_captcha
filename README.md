@@ -30,6 +30,15 @@ Add ServiceProvider to the providers array in `config/app.php`.
 	
 ```
 
+Add Route to reload captcha `routes/web.php`.
+
+```
+    Route::get('/captcha/{key?}', function($key='') {
+        $json=array('img'=>Captcha::img($key),'key'=>Captcha::md5());
+        return json_encode($json);
+    });    
+```
+
 ### Configuration
 
 
@@ -54,7 +63,38 @@ Add ServiceProvider to the providers array in `config/app.php`.
         {!! Captcha::create_cod(); !!}
 		<input name="captcha_md5" type="hidden" value="{!! Captcha::md5(); !!}">
 		<input name="captcha_cod" type="text" value="">
-		<img src="{!! Captcha::img(); !!}">
+		{!! Captcha::img(); !!}
+
+```
+
+##### display CAPTCHA + reload
+
+```html jquery
+                       <div class="pwd_reset_captcha">
+                                @if ($errors->has('captcha_cod'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('captcha_cod') }}</strong>
+                                    </span>
+                                @endif
+                     		{!! Captcha::create_cod(); !!}
+                            <input name="captcha_md5" type="hidden" value="{!! Captcha::md5(); !!}">
+                            <input name="captcha_cod" type="text" value="">
+                            {!! Captcha::img(); !!}
+                            <a href="#" onclick="captcha_redraw()">reload</a>
+                            <script>
+                            function captcha_redraw(key){
+                                var key=$('.pwd_reset_captcha input[name=captcha_md5]').val();
+                                $.get('/captcha/'+key,'', function (data){
+                                    try{
+                                       var json=JSON.parse(data);
+                                       $('.pwd_reset_captcha img.captcha').replaceWith(json.img);
+                                       if(json.key!=''){$('.pwd_reset_captcha input[name=captcha_md5]').val(json.key);}
+                                    }
+                                    catch(e){console.log(e);}
+                                });
+                            }                            
+                            </script>
+ 						</div>
 
 ```
 
