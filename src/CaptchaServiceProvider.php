@@ -66,7 +66,7 @@ class CaptchaServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind('captcha', function ($app) {
-            return new Captcha($app['config']);
+            return new Captcha($app['config']['captcha']);
         });
     }
 

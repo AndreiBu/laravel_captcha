@@ -41,9 +41,16 @@ Add Route to reload captcha `routes/web.php`.
 
 ### Configuration
 
+Add key in in .env file (without brackets):
 
-```
-[]
+```php
+    CAPTCHA_MIN=[0-999 999 999]
+    CAPTCHA_MAX=[0-999 999 999]
+    CAPTCHA_WIDTH=[0-1000]
+    CAPTCHA_HEIGHT=[0-1000]
+    CAPTCHA_TIME=[60-3600]
+    CAPTCHA_GARBAGE=[0-100]
+
 ```
 
 ### Usage

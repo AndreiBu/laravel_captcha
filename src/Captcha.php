@@ -9,7 +9,14 @@ use Illuminate\Validation\Validator;
 
 class Captcha
 {
-    public $md5='';
+    protected $md5='';
+    protected $min=10000;
+    protected $max=100000;
+    protected $life_time=360;
+    protected $height=56;
+    protected $width=180;
+    protected $garbage=25;
+    
     /**
      * Captcha.
      *
@@ -17,6 +24,8 @@ class Captcha
      */
     public function __construct($config=array())
     {
+        $val=array('min','max','life_time','width','height','garbage');
+        foreach ($val as $k=>$v){if(isset($config[$v])){$this->{$v}=$config[$v];}}
     }
 
     /**
@@ -41,7 +50,7 @@ class Captcha
     
     function create_cod($return=false)
     {
-        $a=mt_rand(10000,100000);
+        $a=mt_rand($this->min,$this->max);
         $b=0;
         $c=1;
         $ip='';
@@ -91,19 +100,17 @@ class Captcha
                 }
             }
         $html = '';
-        $w=180;
-        $h=56;
-        $dest1 = imagecreatetruecolor($w,$h);
+        $dest1 = imagecreatetruecolor($this->width,$this->height);
         $color=imagecolorallocate($dest1,255,255,255);
-        imagefilledrectangle($dest1,0,0,$w,$h,$color);
+        imagefilledrectangle($dest1,0,0,$this->width,$this->height,$color);
         
         
         $b1='';
         $color=imagecolorallocate($dest1,0,127,137);
         
-        for ($i=0; $i<25; $i++)
+        for ($i=0; $i<$this->garbage; $i++)
         {
-            $rc=mt_rand(160,180);
+            $rc=mt_rand(160,200);
             $gc=mt_rand(200,220);
             $bc=mt_rand(100,120);
             imagesetthickness($dest1, rand(1, 2));
@@ -113,21 +120,22 @@ class Captcha
         
         for($i=0;$i<strlen($s);$i++)
         {
-            $rc=mt_rand(160,180);
-            $gc=mt_rand(200,220);
-            $bc=mt_rand(100,120);
+            $rc=mt_rand(160,200);
+            $gc=mt_rand(170,220);
+            $bc=mt_rand(100,150);
             $color=imagecolorallocate($dest1,$rc,$gc,$bc);
-            $ugol=mt_rand(-20,15);
-            $x=46+($i*20)+mt_rand(2,12);
-            $y=40+mt_rand(-3,3);
-            $size=mt_rand(20,40);
+            $ugol=mt_rand(-26,20);
+            $block=($this->width/(strlen($s)+1));
+            $x=6+($i*$block)+mt_rand(-10,14);
+            $y=($this->height/1.4)+mt_rand(-5,5);
+            $size=mt_rand(18,50);
             $sum=substr($s,$i,1);
             imagettftext($dest1,$size, $ugol, $x,$y, $color, '/fonts/times.ttf', $sum);
         }
 
-        for ($i=0; $i<25; $i++)
+        for ($i=0; $i<$this->garbage; $i++)
         {
-            $rc=mt_rand(10,180);
+            $rc=mt_rand(10,220);
             $gc=mt_rand(20,200);
             $bc=mt_rand(100,120);
             imagesetthickness($dest1, rand(1, 2));

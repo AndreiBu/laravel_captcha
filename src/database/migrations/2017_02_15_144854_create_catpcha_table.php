@@ -14,11 +14,12 @@ class CreateCatpchaTable extends Migration
     public function up()
     {
      Schema::create('captcha', function (Blueprint $table) {
-          $table->string('a');
-          $table->string('b');
-          $table->string('c');
-          $table->string('md5');
-          $table->dateTime('dat');
+          $table->string('a')->nullable();
+          $table->string('b')->nullable();
+          $table->string('c')->nullable();
+          $table->string('md5')->nullable();
+          $table->dateTime('dat')->nullable();
+          $table->integer('redraw')->default(0);
         });
     }
 
