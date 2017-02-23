@@ -50,7 +50,7 @@ class Captcha
         if($c==1){$c1='+';}
         else if($c==2){$c1='-';if($a<$b){$a1=$b;$a=$b;$b=$a1;}}
         else if($c==3){$c1='*';}
-        $d1=date("Y-m-d G:i:s",time()-3600);
+        $d1=date("Y-m-d G:i:s",time()-360);
         $d2=date("Y-m-d G:i:s",time());
         $str='mediest'.$a.$c1.$b.$ip.$d2;
         $md5_1=md5($str);
@@ -68,12 +68,28 @@ class Captcha
      * @return string
      */
     
-    public function img()
+    public function img($key='')
     {
         $fat=$this->md5;
-        $results = DB::select('select * from captcha where  md5= ?', [$this->md5]);
+        if($key!=''){$fat=mb_substr($key,0,32,'UTF-8');}
+        $results = DB::select('select * from captcha where  md5= ?', [$fat]);
         $s=$b='';
-        if(isset($results[0])){$s=$results[0]->a;}
+        if(isset($results[0]))
+            {
+                $s=$results[0]->a;
+                $redraw=$results[0]->redraw;
+                $redraw++;
+                if($redraw>=6)
+                {
+                    $this->create_cod();
+                    $results = DB::select('select * from captcha where  md5= ?', [$this->md5]);
+                    $s=$results[0]->a;
+                }
+                else
+                {
+                DB::table('captcha')->where('md5', $fat)->update(['redraw' => $redraw]);
+                }
+            }
         $html = '';
         $w=180;
         $h=56;
@@ -124,7 +140,7 @@ class Captcha
                 $contents = ob_get_contents(); 
             ob_end_clean(); 
 
-        $html.= '<img src="data:image/jpeg;base64,' . base64_encode($contents).'">';        
+        $html.= '<img class="captcha" src="data:image/jpeg;base64,' . base64_encode($contents).'">';        
         imagedestroy($dest1);
             
         return $html;
