@@ -16,6 +16,7 @@ class Captcha
     protected $height=56;
     protected $width=180;
     protected $garbage=25;
+    protected $redraw=5;
     
     /**
      * Captcha.
@@ -24,7 +25,7 @@ class Captcha
      */
     public function __construct($config=array())
     {
-        $val=array('min','max','life_time','width','height','garbage');
+        $val=array('min','max','life_time','width','height','garbage','redraw');
         foreach ($val as $k=>$v){if(isset($config[$v])){$this->{$v}=$config[$v];}}
     }
 
@@ -88,7 +89,7 @@ class Captcha
                 $s=$results[0]->a;
                 $redraw=$results[0]->redraw;
                 $redraw++;
-                if($redraw>=6)
+                if($this->redraw>=6)
                 {
                     $this->create_cod();
                     $results = DB::select('select * from captcha where  md5= ?', [$this->md5]);
