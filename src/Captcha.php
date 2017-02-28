@@ -27,6 +27,7 @@ class Captcha
     {
         $val=array('min','max','life_time','width','height','garbage','redraw');
         foreach ($val as $k=>$v){if(isset($config[$v])){$this->{$v}=$config[$v];}}
+        if($this->redraw<1){$this->redraw=1;}
     }
 
     /**
