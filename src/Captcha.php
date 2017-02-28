@@ -89,7 +89,7 @@ class Captcha
                 $s=$results[0]->a;
                 $redraw=$results[0]->redraw;
                 $redraw++;
-                if($this->redraw>=6)
+                if($redraw>$this->redraw)
                 {
                     $this->create_cod();
                     $results = DB::select('select * from captcha where  md5= ?', [$this->md5]);
