@@ -50,6 +50,7 @@ Add Route to reload captcha `routes/web.php`.
     CAPTCHA_HEIGHT=[0-1000]
     CAPTCHA_TIME=[60-3600]
     CAPTCHA_GARBAGE=[0-100]
+    CAPTCHA_REDRAW=[0-10]
 
 ```
 
