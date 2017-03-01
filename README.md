@@ -40,7 +40,8 @@ Add Route to reload captcha `routes/web.php`.
 ```
 
 ### Configuration
- you must copy in  `/public/fonts/` ttf font and specify its path in the configuration `CAPTCHA_FONT` 
+ you must copy in  `/public/fonts/` ttf font and specify its path in the configuration `CAPTCHA_FONT`
+  
 (optional) Add key in .env file (without brackets):
 
 
