@@ -28,7 +28,7 @@ class CaptchaServiceProvider extends ServiceProvider
         
         
         $this->publishMigrations();
-
+        $this->publishes([__DIR__.'/fonts' => public_path('fonts'),]);
 
         
         $app['validator']->extend('captcha', function ($attribute, $value,$validator) use ($app) 
