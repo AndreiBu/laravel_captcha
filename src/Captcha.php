@@ -17,6 +17,7 @@ class Captcha
     protected $width=180;
     protected $garbage=25;
     protected $redraw=5;
+    protected $font_path='/fonts/times.ttf';
     
     /**
      * Captcha.
@@ -25,7 +26,7 @@ class Captcha
      */
     public function __construct($config=array())
     {
-        $val=array('min','max','life_time','width','height','garbage','redraw');
+        $val=array('min','max','life_time','width','height','garbage','redraw','font_path');
         foreach ($val as $k=>$v){if(isset($config[$v])){$this->{$v}=$config[$v];}}
         if($this->redraw<1){$this->redraw=1;}
     }
@@ -132,7 +133,7 @@ class Captcha
             $y=($this->height/1.4)+mt_rand(-5,5);
             $size=mt_rand(18,50);
             $sum=substr($s,$i,1);
-            imagettftext($dest1,$size, $ugol, $x,$y, $color, '/fonts/times.ttf', $sum);
+            imagettftext($dest1,$size, $ugol, $x,$y, $color, $this->font_path, $sum);
         }
 
         for ($i=0; $i<$this->garbage; $i++)

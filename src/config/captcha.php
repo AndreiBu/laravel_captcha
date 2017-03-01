@@ -8,4 +8,5 @@ return [
     'life_time' => env('CAPTCHA_TIME', 360),
     'garbage' => env('CAPTCHA_GARBAGE', 50),
     'redraw' => env('CAPTCHA_REDRAW', 5),
+    'font_path' => env('CAPTCHA_FONT', '/fonts/times.ttf'),
 ];
